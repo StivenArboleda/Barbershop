@@ -6,7 +6,7 @@ Shift separation system for barbershops. solving the problem of long waits at th
 
 - Past and current appointments
 - Choose appointment with date and time
-- Like the barber
+- Likes to barber profile
 - Create user of:
 	- Barber
 	- Client
