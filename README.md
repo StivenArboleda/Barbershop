@@ -42,4 +42,12 @@ npm i
 `
 pip3 install -r requirement.txt
 `
+- First run the backEnd with the command:<br>
+`
+python app.py
+`
+- Second run the frontend inside the "my-app" folder with the command:<br>
+`
+npm start
+`
 > **Note:** In the file **requirement.txt** delete the lines that contain a path related to "/tmp"or similar
