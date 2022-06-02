@@ -63,10 +63,12 @@ export const Menu = ({ user }) => {
   
   const handleClickOpen = () => {
     setOpen(true);
-    handleClick("Edit info")
+  
   };
-  const handleClick = () => {
+  const handleClick = (e) => {
     console.log("clicked");
+    e.preventDefault();
+
   }
   console.log("user", user);
   const isbarber = user === "barber";
@@ -103,8 +105,6 @@ export const Menu = ({ user }) => {
                     <CreationComponent 
                     user={user} 
                     dataClicked={dataClicked}
-                    handleClick={handleClick}
-                    input={input}             
                     />
                   )
                 }

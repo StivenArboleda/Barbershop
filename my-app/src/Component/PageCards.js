@@ -10,71 +10,68 @@ import "./styles/cards.css";
 import Stack from "@mui/material/Stack";
 import {useState} from 'react';
 import {BarberData} from "./BarberData";
+import { useEffect } from "react";
+import firebase from '../firebase';
 export const PageCards = () => {
   const [clicked, setClicked] = useState(false);
+  const [barbers, setBarbers] = useState([]);
+  const [barberId, setBarberId] = useState(0);
+  useEffect(() => {
+    const getBarbers = async () => {
+     // const firebase = firebase.firestore();
+      try {
+        const data = await firebase.collection("barbers").get();
+        const barbers = data.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        if (barbers.length > 0) {
+          setBarbers(barbers);
+        } else {
+          console.log("No hay barberos");
+          console.log(barbers);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBarbers();
+  }, []);
+
   return (
     <div>
       {
         !clicked ? (
           <Stack direction="row" spacing={2} className= "card">
-          <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea onClick={
-              () => {
-                console.log("clicked");
-                setClicked(true);
-              }
-            }>
-              <CardMedia
-                component="img"
-                height="140"
-                image="https://th.bing.com/th/id/OIP.qc8aczpQp6Gzi9KD5aIrlQHaE8?pid=ImgDet&rs=1"
-                alt="barbero"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Barbero
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  barbers are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-    
-    
-          <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea
-                 onClick={
-                  () => {
-                    console.log("clicked");
-                    setClicked(true);
-                  }
-                }
-            >
-              <CardMedia
-                component="img"
-                height="140"
-                image="https://th.bing.com/th/id/OIP.qc8aczpQp6Gzi9KD5aIrlQHaE8?pid=ImgDet&rs=1"
-                alt="barbero"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Barbero 2
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  barbers are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-    
-    
+            {
+              barbers.map(barber => (
+                <Card className="card" key={barber.id} sx={{ maxWidth: 345 }}>
+                  <CardActionArea onClick={() => {
+                            console.log("clicked"); 
+                            setClicked(true);
+                            setBarberId(barber.id) 
+
+                      }}>
+                    <CardMedia
+                      className="cardMedia"
+                      image="https://th.bing.com/th/id/OIP.qc8aczpQp6Gzi9KD5aIrlQHaE8?pid=ImgDet&rs=1"
+                      title="Contemplative Reptile"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {barber.name}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        {barber.description}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              ))
+            }
         </Stack>) : (
           <div id = "album">
             <h1>Album</h1>
-            <BarberData />
+            <BarberData 
+              barberId = {barberId}
+            />
           </div>
         )
       }

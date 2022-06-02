@@ -5,11 +5,19 @@ class LoginComponent extends React.Component {
     super(props);
     this.state = {
       mode: this.props.mode,
+      user: this.props.user,
     };
   }
   toggleMode() {
     var newMode = this.state.mode === "login" ? "signup" : "login";
     this.setState({ mode: newMode });
+    console.log("mode ",this.state.mode);
+  }
+
+  toggleUser(){
+    var newUser = this.state.user === "barber" ? "client" : "barber";
+    this.setState({ user: newUser });
+    console.log(this.state.user);
   }
   render() {
     return (
@@ -33,7 +41,8 @@ class LoginComponent extends React.Component {
               <label htmlFor="form-toggler"></label>
             </div>
           </header>
-          <LoginForm mode={this.state.mode} onSubmit={this.props.onSubmit} />
+          <LoginForm mode={this.state.mode} onSubmit={this.props.onSubmit(this.state.mode)} />
+         
         </section>
       </div>
     );
@@ -97,13 +106,14 @@ class LoginForm extends React.Component {
   }
 }
 
-const Input = ({ id, type, label, disabled }) => (
+const Input = ({ id, type, label, disabled, name }) => (
   <input
     className="form-group__input"
     type={type}
     id={id}
     placeholder={label}
     disabled={disabled}
+    name={name}
   />
 );
 
