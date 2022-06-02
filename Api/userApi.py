@@ -32,6 +32,13 @@ class Barber:
     def addBarberAppointment(barber, appointment):
         barber.clients.append(appointment)
     
+
+class User:
+    def __init__(self, username, password, utype):
+        self.id = ""
+        self.username = username
+        self.password = password
+        self.utype = utype
 class Client:
     
     
@@ -49,10 +56,14 @@ def createClient():
         #print(request.json)
         #print(request.json['username'], request.json['password'], request.json['type'])
         client = Client(request.json['username'], request.json['password'], request.json['type'])
-        
         client.id = id.hex
         st = json.loads(json.dumps(client.__dict__))
         
+        user = User(request.json['username'], request.json['password'], request.json['type'])
+        user.id = id.hex
+        lt = json.loads(json.dumps(user.__dict__))
+
+        user_Ref.document(user.username).set(lt)
         clients_Ref.document(client.id).set(st)
         return jsonify({'status': st})
     except Exception as e:
@@ -66,10 +77,14 @@ def createBarber():
         #print(request.json)
         #print(request.json['username'], request.json['password'], request.json['type'])
         barber = Barber(request.json['username'], request.json['password'], request.json['type'])
-        
         barber.id = id.hex
         st = json.loads(json.dumps(barber.__dict__))
         
+        user = User(request.json['username'], request.json['password'], request.json['type'])
+        user.id = id.hex
+        lt = json.loads(json.dumps(user.__dict__))
+
+        user_Ref.document(user.username).set(lt)
         barber_Ref.document(barber.id).set(st)
         return jsonify({'status': st})
     except Exception as e:
@@ -96,11 +111,22 @@ def addAppointment():
         except Exception as e:
             return f"An Error Ocurred: {e}"
 
-@userApi.route('/login', methods='GET')
-def login():
+@userApi.route('/userLogin', methods=['GET'])
+def userLogin():
+    try:
+        data = user_Ref.document(request.json['username']).get()
+        d = data.to_dict()
+        if (d['username'] == request.json['username']) and (d['password'] == request.json['password']):
+            return jsonify({'status': True}), 200
+        else:
+            return jsonify({'status': False}), 200
+        
+    except Exception as e:
+        return f"An Error Occured: {e}"
+
     
 
-
+#name, email, passworrd, utype
 @userApi.route('/add', methods=['POST'])
 def create():
     try:

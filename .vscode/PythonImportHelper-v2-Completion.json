@@ -1096,6 +1096,15 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "kind": 6,
+        "importPath": "Api.userApi",
+        "description": "Api.userApi",
+        "peekOfCode": "class User:\n    def __init__(self, username, password, utype):\n        self.id = \"\"\n        self.username = username\n        self.password = password\n        self.utype = utype\nclass Client:\n    def __init__(self, username, password, utype):\n        self.id = \"\"\n        self.username = username",
+        "detail": "Api.userApi",
+        "documentation": {}
+    },
+    {
         "label": "Client",
         "kind": 6,
         "importPath": "Api.userApi",
@@ -1109,7 +1118,7 @@
         "kind": 2,
         "importPath": "Api.userApi",
         "description": "Api.userApi",
-        "peekOfCode": "def createClient():\n    try:\n        id = uuid.uuid1()\n        #print(request.json)\n        #print(request.json['username'], request.json['password'], request.json['type'])\n        client = Client(request.json['username'], request.json['password'], request.json['type'])\n        client.id = id.hex\n        st = json.loads(json.dumps(client.__dict__))\n        clients_Ref.document(client.id).set(st)\n        return jsonify({'status': st})",
+        "peekOfCode": "def createClient():\n    try:\n        id = uuid.uuid1()\n        #print(request.json)\n        #print(request.json['username'], request.json['password'], request.json['type'])\n        client = Client(request.json['username'], request.json['password'], request.json['type'])\n        client.id = id.hex\n        st = json.loads(json.dumps(client.__dict__))\n        user = User(request.json['username'], request.json['password'], request.json['type'])\n        user.id = id.hex",
         "detail": "Api.userApi",
         "documentation": {}
     },
@@ -1118,7 +1127,7 @@
         "kind": 2,
         "importPath": "Api.userApi",
         "description": "Api.userApi",
-        "peekOfCode": "def createBarber():\n    try:\n        id = uuid.uuid1()\n        #print(request.json)\n        #print(request.json['username'], request.json['password'], request.json['type'])\n        barber = Barber(request.json['username'], request.json['password'], request.json['type'])\n        barber.id = id.hex\n        st = json.loads(json.dumps(barber.__dict__))\n        barber_Ref.document(barber.id).set(st)\n        return jsonify({'status': st})",
+        "peekOfCode": "def createBarber():\n    try:\n        id = uuid.uuid1()\n        #print(request.json)\n        #print(request.json['username'], request.json['password'], request.json['type'])\n        barber = Barber(request.json['username'], request.json['password'], request.json['type'])\n        barber.id = id.hex\n        st = json.loads(json.dumps(barber.__dict__))\n        user = User(request.json['username'], request.json['password'], request.json['type'])\n        user.id = id.hex",
         "detail": "Api.userApi",
         "documentation": {}
     },
@@ -1132,11 +1141,11 @@
         "documentation": {}
     },
     {
-        "label": "login",
+        "label": "userLogin",
         "kind": 2,
         "importPath": "Api.userApi",
         "description": "Api.userApi",
-        "peekOfCode": "def login():\n@userApi.route('/add', methods=['POST'])\ndef create():\n    try:\n        id = uuid.uuid4()    \n        user_Ref.document(request.json['id']).set(request.json)\n        return jsonify({'status': True}), 200\n    except Exception as e:\n        return f\"An Error Occured: {e}\"\n@userApi.route('/test',methods=['GET','POST'])",
+        "peekOfCode": "def userLogin():\n    try:\n        data = user_Ref.document(request.json['username']).get()\n        d = data.to_dict()\n        if (d['username'] == request.json['username']) and (d['password'] == request.json['password']):\n            return jsonify({'status': True}), 200\n        else:\n            return jsonify({'status': False}), 200\n    except Exception as e:\n        return f\"An Error Occured: {e}\"",
         "detail": "Api.userApi",
         "documentation": {}
     },

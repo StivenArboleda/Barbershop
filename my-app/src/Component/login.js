@@ -41,7 +41,7 @@ class LoginComponent extends React.Component {
               <label htmlFor="form-toggler"></label>
             </div>
           </header>
-          <LoginForm mode={this.state.mode} onSubmit={this.props.onSubmit(this.state.mode)} />
+          <LoginForm mode={this.state.mode} onSubmit={this.props.onSubmit} />
          
         </section>
       </div>
@@ -106,14 +106,13 @@ class LoginForm extends React.Component {
   }
 }
 
-const Input = ({ id, type, label, disabled, name }) => (
+const Input = ({ id, type, label, disabled }) => (
   <input
     className="form-group__input"
     type={type}
     id={id}
     placeholder={label}
     disabled={disabled}
-    name={name}
   />
 );
 
